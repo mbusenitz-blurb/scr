@@ -1,4 +1,4 @@
-function Console( controller ) {
+var Console = function( controller ) {
 	controller.on( 'qmake', function() {
 		console.log( 'qmake' ); 
 	}); 
