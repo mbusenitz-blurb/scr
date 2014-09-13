@@ -73,6 +73,8 @@ function runTest(cwd, cb) {
 		cwd: '/data/repositories/native_booksmart_test/TestBookWright.app/Contents/MacOS'
 	}, cb );
 
+	controller.emit( 'run' ); 
+
 	currentStep = "test";
 
 	emitter.on( 'exit', function(code, signal) {
@@ -126,6 +128,8 @@ function makeProcessor(map, cb, printer) {
 	var emitter = new events.EventEmitter()
 	p = new Processor(map, emitter); 
 	
+	controller.emit( 'make' ); 
+
 	if (typeof printer === 'undefined' )
 		printer = defaultPrinter; 
 
