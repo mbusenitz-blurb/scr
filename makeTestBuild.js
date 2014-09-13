@@ -13,6 +13,8 @@ var events = require( 'events' )
   		onError: print
   }; 
 
+assert( typeof Processor !== 'undefined' );
+
 var controller = new events.EventEmitter()
   , consView = new Console( controller )
   , notifer = new Notifier( controller );
@@ -59,14 +61,19 @@ function makeTestBuild(cwd) {
 		}
 
 		runQMake( cwd, function() {
-			runMake( cwd, function() {
-				runTest( '/data/repositories/native_booksmart_test' ); 
-			}); 
+
+			console.log( 'qmake finished' );
+
+			// runMake( cwd, function() {
+			// 	runTest( '/data/repositories/native_booksmart_test' ); 
+			// }); 
 		});
 	}); 
 }
 
 function runTest(cwd, cb) {
+
+	console.log( 'run test' ); 
 
 	var emitter = makeProcessor({
 		cmd: './TestBookWright',
@@ -79,14 +86,22 @@ function runTest(cwd, cb) {
 }
 
 function runMake(cwd, cb) {
+
+	console.log( 'make' );
+
 	var emitter = makeProcessor({ 
 			cmd: 'make', 
 			args: [ '-j', '8' ], 
 			cwd: '/data/repositories/native_booksmart_test/'
-		}, cb, printer );
+		}, cb ); // , printer );
 
 	controller.emit( 'step', 'make' );
 	emitter.emit( 'execute' ); 
+
+	emitter.on( 'close', function( code, signal ) { 
+
+		console.log( 'make exit' + code ); 
+	});
 }
 
 function runQMake(cwd, cb) {
@@ -123,7 +138,13 @@ function makeProcessor(map, cb, printer) {
 	emitter.on( 'stdout', printer.onOk );
 	emitter.on( 'stderr', printer.onError );
 	emitter.on( 'exit', function( code, signal ) {
+			
+		console.log( 'exit' ); 
+
 		controller.emit( 'exit', code, signal );
+		//if (!code) {
+			cb();
+		//}
 	}); 
 
 	return emitter; 
