@@ -5,7 +5,7 @@ function Console( controller ) {
 
 	controller.on( 'step', function(step) {
 		cursor.green();
-		console.log( 'step' ); 
+		console.log( step ); 
 		cursor.reset();
 	}); 
 }
