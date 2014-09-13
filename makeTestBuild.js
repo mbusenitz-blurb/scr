@@ -7,11 +7,16 @@ var events = require( 'events' )
   , Notification = require( 'node-notifier' )
   , join = require( 'path' ).join
   , currentStep = 'none'
+  , Console = require( './views/console' )
   , printer = require( './print.js' )
   , defaultPrinter = { 
   		onOk: print, 
   		onError: print
   }; 
+
+var controller = new events.EventEmitter()
+  , consView = new Console( controller ); 
+
 
 function print(data) {
 	process.stdout.write( data.toString() ); 
@@ -91,6 +96,8 @@ function runMake(cwd, cb) {
 }
 
 function runQMake(cwd, cb) {
+	
+	controller.emit( 'qmake' ); 
 	
 	currentStep = "qmake"; 
 
