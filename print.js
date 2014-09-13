@@ -11,7 +11,7 @@ function onOk(data) {
 	matches = bufferOk.match( fileRegex );
 	if (matches) {
 		process.stdout.write( matches[1] + '\n' );
-		bufferOk = files.replace( fileRegex, '' );
+		bufferOk = bufferOk.replace( fileRegex, '' );
 	}
 }
 
