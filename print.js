@@ -2,8 +2,9 @@
 
 var bufferError = ''
   , bufferOk = ''
-  , errRegex = new RegExp( ".*error:.* ../native_booksmart/" )
-  , fileRegex = new RegExp( ".* ../native_booksmart/(.*)" );
+  , relative = '../native_booksmart/'
+  , errRegex = new RegExp( ".*error:.*" )
+  , fileRegex = new RegExp( ".* " + relative + "(.*)" );
 
 function onOk(data) {
 	var matches;
@@ -21,7 +22,7 @@ function onError(data) {
 	matches = bufferError.match( errRegex );
 	if (matches) {
 		matches.forEach( function( match ) {
-			match = match.replace( '../native_booksmart/', '' );
+			match = match.replace( relative, '' );
 			process.stdout.write( match + '\n' );
 		} );
 		bufferError = bufferError.replace( errRegex, '' );
