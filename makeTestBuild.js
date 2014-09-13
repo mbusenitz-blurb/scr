@@ -25,7 +25,7 @@ checkProjectSum( '/data/repositories/native_booksmart/' );
 
 function checkProjectSum(cwd) {
 
-	controller.emit( 'check' ); 
+	controller.emit( 'step', 'check' ); 
 
 	fs.readFile( '/data/repositories/native_booksmart/Bookwright.pro', function( err, data) {
 
@@ -74,7 +74,7 @@ function runTest(cwd, cb) {
 		cwd: '/data/repositories/native_booksmart_test/TestBookWright.app/Contents/MacOS'
 	}, cb );
 
-	controller.emit( 'run' ); 
+	controller.emit( 'step', 'run' ); 
 	emitter.emit( 'execute' );  
 }
 
@@ -85,7 +85,7 @@ function runMake(cwd, cb) {
 			cwd: '/data/repositories/native_booksmart_test/'
 		}, cb, printer );
 
-	controller.emit( 'make' );
+	controller.emit( 'step', 'make' );
 	emitter.emit( 'execute' ); 
 }
 
@@ -109,7 +109,7 @@ function runQMake(cwd, cb) {
 			cwd: cwd 
 		}, cb );
 
-	controller.emit( 'qmake' ); 
+	controller.emit( 'step', 'qmake' ); 
 	emitter.emit( 'execute' );
 }
 
