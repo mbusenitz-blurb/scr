@@ -2,7 +2,7 @@
 
 var bufferError = ''
   , bufferOk = ''
-  , errRegex = new RegExp( ".*error:.*" )
+  , errRegex = new RegExp( ".*error:.* ../native_booksmart/" )
   , fileRegex = new RegExp( ".* ../native_booksmart/(.*)" );
 
 function onOk(data) {
