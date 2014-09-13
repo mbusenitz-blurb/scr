@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-var events = require( 'events' )
+var assert = require( 'assert' )
+  , events = require( 'events' )
   , Processor = require( 'mucbuc-jsthree' ).Processor
   , fs = require( 'fs' )
   , crypto = require( 'crypto' )
@@ -44,11 +45,11 @@ function checkProjectSum(cwd) {
       		fs.writeFile( '/data/repositories/native_booksmart_test/.shasum', sum );
       }
       else {
-      	runMake( cwd, function() {
-					runTest( '/data/repositories/native_booksmart_test' ); 
-				}); 
-      }
-		}); 
+      		runMake( cwd, function() {
+				runTest( '/data/repositories/native_booksmart_test' ); 
+			}); 
+      	}
+	}); 
   }); 
 }
 
@@ -61,12 +62,9 @@ function makeTestBuild(cwd) {
 		}
 
 		runQMake( cwd, function() {
-
-			console.log( 'qmake finished' );
-
-			// runMake( cwd, function() {
-			// 	runTest( '/data/repositories/native_booksmart_test' ); 
-			// }); 
+			runMake( cwd, function() {
+				runTest( '/data/repositories/native_booksmart_test' ); 
+			}); 
 		});
 	}); 
 }
@@ -93,7 +91,7 @@ function runMake(cwd, cb) {
 			cmd: 'make', 
 			args: [ '-j', '8' ], 
 			cwd: '/data/repositories/native_booksmart_test/'
-		}, cb ); // , printer );
+		}, cb, printer );
 
 	controller.emit( 'step', 'make' );
 	emitter.emit( 'execute' ); 
@@ -138,14 +136,11 @@ function makeProcessor(map, cb, printer) {
 	emitter.on( 'stdout', printer.onOk );
 	emitter.on( 'stderr', printer.onError );
 	emitter.on( 'exit', function( code, signal ) {
-			
-		console.log( 'exit' ); 
-
 		controller.emit( 'exit', code, signal );
-		//if (!code) {
+		if (!code) {
 			cb();
-		//}
-	}); 
+		}
+	});  
 
 	return emitter; 
 }
