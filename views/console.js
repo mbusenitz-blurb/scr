@@ -12,5 +12,5 @@ var Console = function( controller ) {
 	}); 
 }
 
-module.exports.Console = Console; 
+module.exports = Console; 
 
