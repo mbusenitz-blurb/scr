@@ -1,5 +1,6 @@
 {
 	"dependencies": {
-		"ansi": "*"
+		"ansi": "*", 
+		"node-notifier": "*"
 	}
 }

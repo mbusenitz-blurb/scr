@@ -4,9 +4,8 @@ var events = require( 'events' )
   , Processor = require( 'mucbuc-jsthree' ).Processor
   , fs = require( 'fs' )
   , crypto = require( 'crypto' )
-  , Notification = require( 'node-notifier' )
   , join = require( 'path' ).join
-  , currentStep = 'none'
+  , Notifier = require( './views/notifier' )
   , Console = require( './views/console' )
   , printer = require( './print.js' )
   , defaultPrinter = { 
@@ -15,8 +14,8 @@ var events = require( 'events' )
   }; 
 
 var controller = new events.EventEmitter()
-  , consView = new Console( controller ); 
-
+  , consView = new Console( controller )
+  , notifer = new Notifier( controller );
 
 function print(data) {
 	process.stdout.write( data.toString() ); 
@@ -76,14 +75,6 @@ function runTest(cwd, cb) {
 	}, cb );
 
 	controller.emit( 'run' ); 
-
-	currentStep = "test";
-
-	emitter.on( 'exit', function(code, signal) {
-		var n = new Notification(); 
-		n.notify({message: "code: "+ code + " signal: " + signal}); 
-	}); 
-		
 	emitter.emit( 'execute' );  
 }
 
@@ -94,17 +85,12 @@ function runMake(cwd, cb) {
 			cwd: '/data/repositories/native_booksmart_test/'
 		}, cb, printer );
 
-	currentStep = "make";
-
+	controller.emit( 'make' );
 	emitter.emit( 'execute' ); 
 }
 
 function runQMake(cwd, cb) {
 	
-	controller.emit( 'qmake' ); 
-	
-	currentStep = "qmake"; 
-
 	var emitter = makeProcessor({ 
 			cmd: '/Users/mbusenitz/Qt5.2.1/5.2.1/clang_64/bin/qmake', 
 			args: [ 
@@ -123,6 +109,7 @@ function runQMake(cwd, cb) {
 			cwd: cwd 
 		}, cb );
 
+	controller.emit( 'qmake' ); 
 	emitter.emit( 'execute' );
 }
 
@@ -135,19 +122,6 @@ function makeProcessor(map, cb, printer) {
 
 	emitter.on( 'stdout', printer.onOk );
 	emitter.on( 'stderr', printer.onError );
-	
-
-	if (typeof cb === 'function') {
-		emitter.on( 'exit', function(code, signal) {
-			if (!code) {
-				cb();
-			}
-			else {
-				var n = new Notification(); 
-				n.notify({message: currentStep + " failed! code: "+ code + " signal: " + signal}); 
-			}
-		});
-	}
 
 	function print(data) {
 		console.log( data.toString() ); 

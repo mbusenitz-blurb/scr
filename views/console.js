@@ -1,7 +1,7 @@
 var ansi = require( 'ansi' )
   , cursor = ansi( process.stdout ); 
 
-var Console = function( controller ) {
+function Console( controller ) {
 
 	controller.on( 'qmake', function() {
 		cursor.green();
@@ -26,7 +26,6 @@ var Console = function( controller ) {
 		console.log( 'check' ); 
 		cursor.reset();
 	});
-
 }
 
 module.exports = Console; 
