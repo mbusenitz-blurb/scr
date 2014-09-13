@@ -21,7 +21,7 @@ function onError(data) {
 	matches = bufferError.match( errRegex );
 	if (matches) {
 		matches.forEach( function( match ) {
-			match = replace( '../native_booksmart/', '' );
+			match = match.replace( '../native_booksmart/', '' );
 			process.stdout.write( match + '\n' );
 		} );
 		bufferError = bufferError.replace( errRegex, '' );
