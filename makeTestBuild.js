@@ -122,10 +122,9 @@ function makeProcessor(map, cb, printer) {
 
 	emitter.on( 'stdout', printer.onOk );
 	emitter.on( 'stderr', printer.onError );
-
-	function print(data) {
-		console.log( data.toString() ); 
-	}
+	emitter.on( 'exit', function( code, signal ) {
+		controller.emit( 'exit', code, signal );
+	}); 
 
 	return emitter; 
 }
