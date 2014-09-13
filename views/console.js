@@ -3,29 +3,11 @@ var ansi = require( 'ansi' )
 
 function Console( controller ) {
 
-	controller.on( 'qmake', function() {
+	controller.on( 'step', function(step) {
 		cursor.green();
-		console.log( 'qmake' ); 
+		console.log( 'step' ); 
 		cursor.reset();
 	}); 
-	
-	controller.on( 'make', function() {
-		cursor.green();
-		console.log( 'make' ); 
-		cursor.reset();
-	}); 
-	
-	controller.on( 'run', function() {
-		cursor.green();
-		console.log( 'run' ); 
-		cursor.reset();
-	}); 
-
-	controller.emit( 'check', function() {
-		cursor.green();
-		console.log( 'check' ); 
-		cursor.reset();
-	});
 }
 
 module.exports = Console; 
