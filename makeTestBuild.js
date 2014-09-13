@@ -26,6 +26,8 @@ checkProjectSum( '/data/repositories/native_booksmart/' );
 
 function checkProjectSum(cwd) {
 
+	controller.emit( 'check' ); 
+
 	fs.readFile( '/data/repositories/native_booksmart/Bookwright.pro', function( err, data) {
 
 		var shasum = crypto.createHash('sha1')
@@ -128,8 +130,6 @@ function makeProcessor(map, cb, printer) {
 	var emitter = new events.EventEmitter()
 	p = new Processor(map, emitter); 
 	
-	controller.emit( 'make' ); 
-
 	if (typeof printer === 'undefined' )
 		printer = defaultPrinter; 
 

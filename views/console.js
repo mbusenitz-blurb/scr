@@ -20,6 +20,13 @@ var Console = function( controller ) {
 		console.log( 'run' ); 
 		cursor.reset();
 	}); 
+
+	controller.emit( 'check', function() {
+		cursor.green();
+		console.log( 'check' ); 
+		cursor.reset();
+	});
+
 }
 
 module.exports = Console; 
