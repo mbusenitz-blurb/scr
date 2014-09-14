@@ -137,7 +137,7 @@ function makeProcessor(map, cb, printer) {
 	emitter.on( 'stderr', printer.onError );
 	emitter.on( 'exit', function( code, signal ) {
 		controller.emit( 'exit', code, signal );
-		if (!code) {
+		if (!code && typeof cb === 'function') {
 			cb();
 		}
 	});  
