@@ -1,0 +1,11 @@
+{
+	"scripts": {
+		"test": "mocha -u tdd --recursive"
+	},
+	"dependencies": {
+		"ansi": "*", 
+		"node-notifier": "*",
+		"chai": "*", 
+		"mocha": "*"
+	}
+}
