@@ -3,9 +3,29 @@ var ansi = require( 'ansi' )
 
 function Console( controller ) {
 
+	var prev; 
+
+	process.on( 'exit', function() {
+		if(prev) {
+			cursor.green();
+			console.timeEnd( prev );
+			cursor.reset();
+		}
+	});
+
 	controller.on( 'step', function(step) {
 		cursor.green();
-		console.log( step ); 
+		if(prev) 
+			console.timeEnd( prev );
+		console.log( step );
+		console.time( step );
+		cursor.reset();
+		prev = step;
+	}); 
+
+	controller.on( 'generate', function( sum ) {
+		cursor.green();
+		console.log( 'generate build ' + sum ); 
 		cursor.reset();
 	}); 
 }
