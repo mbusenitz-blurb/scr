@@ -2,7 +2,6 @@ var ansi = require( 'ansi' )
   , cursor = ansi( process.stdout ); 
 
 function Console( controller ) {
-
 	var prev; 
 
 	process.on( 'exit', function() {
@@ -28,6 +27,7 @@ function Console( controller ) {
 		console.log( 'generate build ' + sum ); 
 		cursor.reset();
 	}); 
+
 }
 
 module.exports = Console; 
