@@ -8,15 +8,25 @@ var assert = require( 'assert' )
   , join = require( 'path' ).join
   , Notifier = require( './views/notifier' )
   , Console = require( './views/console' )
+  , Maker = require( './maker' )
+  , Qmaker = require( './qmaker' )
+  , Generator = reqiure( './generator' )
   , printer = require( './print.js' )
   , defaultPrinter = { 
   		onOk: print, 
   		onError: print
-  }; 
+  	}
+  , applescript = require("applescript")
+  , script = 'tell application "Terminal"\n' +
+  				'do shell script ' +
+		  		'open repositories/native_booksmart_test/TestBookWright.app/Contents/MacOS/TestBookWright' +
+		  		'\nactivate\n' +
+		  		'end tell';
 
 assert( typeof Processor !== 'undefined' );
 
 var controller = new events.EventEmitter()
+  , generator = new Generator( controller )
   , consView = new Console( controller )
   , notifer = new Notifier( controller );
 
@@ -73,11 +83,18 @@ function runTest(cwd, cb) {
 
 	console.log( 'run test' ); 
 
-	var emitter = makeProcessor({
-		cmd: './TestBookWright',
-		args: ['-t', '*testChunkedUploaderOrientation*'], 
-		cwd: '/data/repositories/native_booksmart_test/TestBookWright.app/Contents/MacOS'
-	}, cb );
+
+	applescript.execString(script, function(err) {
+	  if (err) {
+	    console.log( err );
+	  }
+	});
+
+	// var emitter = makeProcessor({
+	// 	cmd: './TestBookWright',
+	// 	args: ['-t', '*testChunkedUploaderOrientation*'], 
+	// 	cwd: '/data/repositories/native_booksmart_test/TestBookWright.app/Contents/MacOS'
+	// }, cb );
 
 	controller.emit( 'step', 'run' ); 
 	emitter.emit( 'execute' );  

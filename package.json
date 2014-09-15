@@ -6,6 +6,9 @@
 		"ansi": "*", 
 		"node-notifier": "*",
 		"chai": "*", 
-		"mocha": "*"
+		"mocha": "*",
+		"applescript": "*",
+		"mucbuc-jsthree": "*",
+		"commander": "*"
 	}
 }
