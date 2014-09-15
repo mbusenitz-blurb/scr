@@ -8,22 +8,22 @@ var assert = require( 'assert' )
 function Maker(controller, options) {
 
   assert( typeof options !== 'undefined' );
-  assert( options.hasOwnProperty( 'buildDir' ) ); 
+  assert( options.hasOwnProperty( 'buildDir' ) );
 
   controller.on( 'build', function() {
     var emitter = base.makeProcessor({ 
-        cmd: 'make', 
-        args: [ '-j', '8' ], 
+        cmd: 'make',
+        args: [ '-j', '8' ],
         cwd: options.buildDir
       }, printer );
 
-    emitter.on( 'exit', function( code, signal ) { 
+    emitter.on( 'exit', function( code, signal ) {
       if (!code) {
-        controller.emit( 'run' ); 
+        controller.emit( 'run' );
       }
     });
     controller.emit( 'step', 'make' );
-    emitter.emit( 'execute' ); 
+    emitter.emit( 'execute' );
   });
 }
 
