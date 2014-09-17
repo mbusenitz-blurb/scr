@@ -20,7 +20,6 @@ function Qmaker(controller, options ) {
 					'CONFIG+=x86_64',
 					'CONFIG+=declarative_debug',
 					'CONFIG+=qml_debug', 
-					'CONFIG+=testmake',
 					'-o', 
 					'/data/repositories/native_booksmart_test/Makefile'
 				], 

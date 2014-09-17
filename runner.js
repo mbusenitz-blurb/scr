@@ -11,11 +11,10 @@ function Runner(controller, options) {
 	assert( options.hasOwnProperty( 'buildDir' ) ); 
 	
 	controller.on( 'run', function() { 
-	  	var path = join( options.buildDir, "TestBookWright.app/Contents/MacOS/TestBookWright" )
-	  	  , args = options.hasOwnProperty( 'test' ) ? [ '-t', options.test ] : [];
+	  	var path = join( options.buildDir, "BookWright.app/Contents/MacOS/BookWright" );
 
 	  	controller.emit( 'step', 'run' ); 
-		cp.spawn( path, args, { stdio: 'inherit' } ); 
+		cp.spawn( path, [ '--project=~/assets/dummys/small_square_empty.blurb'], { stdio: 'inherit' } ); 
 	});
 }
 
@@ -23,7 +22,6 @@ if (process.argv[1].indexOf('runner.js') != -1) {
 	var program = require( 'commander' ); 
 
 	program.version( '0.0.0' )
-	  .option( '-t --test [match]', 'test matching cases' )
 	  .option( '-b --buildDir [path]', 'target build directory' )
 	  .parse( process.argv ); 
 
