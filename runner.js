@@ -8,7 +8,7 @@ function Runner(controller, options) {
 	assert( options.hasOwnProperty( 'buildDir' ) ); 
 	
 	controller.on( 'run', function() { 
-	  	var path = join( options.buildDir, "TestBookWright.app/Contents/MacOS/TestBookWright" )
+	  	var path = join( options.buildDir, options.target )
 	  	  , args = options.hasOwnProperty( 'test' ) ? [ '-t', options.test ] : [];
 
 	  	controller.emit( 'step', 'run' ); 

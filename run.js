@@ -20,16 +20,18 @@ program.version( '0.0.0' )
 function Configuration() {
   var instance = this;
 
-  this.defPath = '/data/repositories/native_booksmart/Bookwright.pro',
+  this.defPath = '/Users/mbusenitz/work/native_booksmart/Bookwright.pro',
 
   this.workingDir = path.dirname( this.defPath );
 
   this.buildDir = path.resolve( 
     instance.workingDir, 
-    path.join( '../', path.basename( instance.workingDir ) + '_o' ) 
+    path.join( '../', path.basename( instance.workingDir ) + '_build' ) 
   ); 
 
   this.sumFile = '.shasum';
+
+  this.target = 'TestBookWright.app/Contents/MacOS/TestBookWright';
 }
 
 var config = new Configuration();
@@ -45,7 +47,7 @@ if (program.qmake) {
     , notifer = new Notifier( controller )
     , qmaker = new Qmaker( controller, config ); 
 
-  controller.emit( 'generate' );
+  controller.emit( 'check' );
 }
 else if (program.make) {
   var controller = new events.EventEmitter()
