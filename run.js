@@ -31,7 +31,7 @@ function Configuration() {
 
   this.sumFile = '.shasum';
 
-  this.target = 'TestBookWright.app/Contents/MacOS/TestBookWright';
+  this.target = 'BookWright.app/Contents/MacOS/BookWright';
 }
 
 var config = new Configuration();
