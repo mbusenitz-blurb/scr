@@ -2,6 +2,7 @@
 
 var assert = require( 'assert' )
   , events = require( 'events' )
+  , path = require( 'path' )
   , Notifier = require( './views/notifier' )
   , Console = require( './views/console' )
   , Generator = require( './generator' )
@@ -12,25 +13,60 @@ var assert = require( 'assert' )
 
 program.version( '0.0.0' )
 	.option( '-t --test [match]', 'test matching cases' )
-	.parse( process.argv );
+  .option( '-q --qmake', 'only run qmake' )
+  .option( '-m --make', 'only run make' )
+  .parse( process.argv );
 
-var options = {
-	defPath: '/data/repositories/native_booksmart/Bookwright.pro', 
-	buildDir: '/data/repositories/native_booksmart_test/', 
-	sumFile: '.shasum', 
-	workingDir: '/data/repositories/native_booksmart/'
-};
+function Configuration() {
+  var instance = this;
 
-if (program.test) {
-	options.test = program.test;
+  this.defPath = '/Users/mbusenitz/work/native_booksmart/Bookwright.pro',
+
+  this.workingDir = path.dirname( this.defPath );
+
+  this.buildDir = path.resolve( 
+    instance.workingDir, 
+    path.join( '../', path.basename( instance.workingDir ) + '_build' ) 
+  ); 
+
+  this.sumFile = '.shasum';
+
+  this.target = 'TestBookWright.app/Contents/MacOS/TestBookWright';
 }
 
-var controller = new events.EventEmitter()
-  , generator = new Generator( controller, options )
-  , consView = new Console( controller )
-  , notifer = new Notifier( controller )
-  , qmaker = new Qmaker( controller, options )
-  , maker = new Maker( controller, options )
-  , runner = new Runner( controller, options ); 
+var config = new Configuration();
 
-controller.emit( 'check' );
+if (program.test) {
+	config.test = program.test;
+}
+
+if (program.qmake) {
+  var controller = new events.EventEmitter()
+    , generator = new Generator( controller, config )
+    , consView = new Console( controller )
+    , notifer = new Notifier( controller )
+    , qmaker = new Qmaker( controller, config ); 
+
+  controller.emit( 'check' );
+}
+else if (program.make) {
+  var controller = new events.EventEmitter()
+    , generator = new Generator( controller, config )
+    , consView = new Console( controller )
+    , notifer = new Notifier( controller )
+    , maker = new Maker( controller, config ); 
+
+  controller.emit( 'build' );
+}
+else {
+
+  var controller = new events.EventEmitter()
+    , generator = new Generator( controller, config )
+    , consView = new Console( controller )
+    , notifer = new Notifier( controller )
+    , qmaker = new Qmaker( controller, config )
+    , maker = new Maker( controller, config )
+    , runner = new Runner( controller, config ); 
+
+  controller.emit( 'check' );
+}

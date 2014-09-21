@@ -39,7 +39,7 @@ function Generator(controller, options) {
 
         fs.exists( options.buildDir, function( exists ) {
           if (!exists) {
-            fs.mkdir('/data/repositories/native_booksmart_test/', function() {
+            fs.mkdir( options.buildDir, function() {
               controller.emit( 'generate', sum );
             }); 
           }
