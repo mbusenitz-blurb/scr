@@ -7,7 +7,6 @@
 		"node-notifier": "*",
 		"chai": "*", 
 		"mocha": "*",
-		"applescript": "*",
 		"mucbuc-jsthree": "*",
 		"commander": "*"
 	}
