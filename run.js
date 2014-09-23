@@ -24,11 +24,13 @@ function Configuration() {
 
   this.workingDir = path.dirname( this.defPath );
 
-  this.buildDir = path.resolve( 
-    instance.workingDir, 
-    path.join( '../', path.basename( instance.workingDir ) + '_build' ) 
-  ); 
+  this.buildDir = '/data/repositories/native_booksmart_build';
 
+  // path.resolve( 
+  //   instance.workingDir, 
+  //   path.join( '../', path.basename( instance.workingDir ) + '_build' ) 
+  // ); 
+  
   this.sumFile = '.shasum';
 
   this.target = 'BookWright.app/Contents/MacOS/BookWright';
