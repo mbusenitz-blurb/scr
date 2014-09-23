@@ -32,11 +32,7 @@ function Generator(controller, options) {
       if (err) throw err;
       else {
         
-        var sum = crypto
-          .createHash('sha1')
-          .update(defData)
-          .digest('hex');
-
+        var sum = calcSum(defData, options.qmakeOptions );
         fs.exists( options.buildDir, function( exists ) {
           if (!exists) {
             fs.mkdir( options.buildDir, function() {
@@ -50,6 +46,15 @@ function Generator(controller, options) {
             });    
           }
         }); 
+
+        function calcSum(defData, qmakeOptions) {
+          var sum = crypto
+            .createHash('sha1')
+            .update(defData)
+            .update(qmakeOptions.toString())
+            .digest('hex');
+          return sum; 
+        }
       }
     });
   }); 

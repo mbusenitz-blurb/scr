@@ -13,21 +13,15 @@ function Qmaker(controller, options ) {
 	console.log( path.join( options.buildDir, 'Makefile' ) );
 
 	controller.on( 'generate', function() {
+		
+		var args = [];
+		args.push( options.defPath ); 
+		args.concat( options.qmakeOptions );
+		args.concat( '-o', path.join( options.buildDir, 'Makefile' ) ); 
+
 		var emitter = base.makeProcessor({ 
 				cmd: '/Users/mbusenitz/Qt5.2.1/5.2.1/clang_64/bin/qmake', 
-				args: [ 
-					options.defPath,
-					'-r',
-					'-spec',
-					'macx-clang',
-					'CONFIG+=debug',
-					'CONFIG+=x86_64',
-					'CONFIG+=declarative_debug',
-					'CONFIG+=qml_debug', 
-					'CONFIG+=testmake',
-					'-o', 
-					path.join( options.buildDir, 'Makefile' )
-				], 
+				args: args, 
 				cwd: options.buildDir 
 			});
 
