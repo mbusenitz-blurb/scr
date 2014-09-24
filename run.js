@@ -24,14 +24,26 @@ function Configuration() {
 
   this.workingDir = path.dirname( this.defPath );
 
-  this.buildDir = path.resolve( 
-    instance.workingDir, 
-    path.join( '../', path.basename( instance.workingDir ) + '_build' ) 
-  ); 
+  // this.buildDir = path.resolve( 
+  //   instance.workingDir, 
+  //   path.join( '../', path.basename( instance.workingDir ) + '_build' ) 
+  // ); 
 
+  this.buildDir = '/data/repositories/native_booksmart_build'; 
+  
   this.sumFile = '.shasum';
 
-  this.target = 'TestBookWright.app/Contents/MacOS/TestBookWright';
+  this.target = 'BookWright.app/Contents/MacOS/BookWright';
+
+  this.qmakeOptions = [           
+    '-r',
+    '-spec',
+    'macx-clang',
+    'CONFIG+=debug',
+    'CONFIG+=x86_64',
+    'CONFIG+=declarative_debug',
+    'CONFIG+=qml_debug' 
+  ];
 }
 
 var config = new Configuration();
