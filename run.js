@@ -30,7 +30,7 @@ function Configuration() {
   //   instance.workingDir, 
   //   path.join( '../', path.basename( instance.workingDir ) + '_build' ) 
   // ); 
-  
+
   this.sumFile = '.shasum';
 
   this.target = 'TestBookWright.app/Contents/MacOS/TestBookWright';
