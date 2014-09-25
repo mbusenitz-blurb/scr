@@ -9,7 +9,8 @@ var assert = require( 'assert' )
   , Qmaker = require( './qmaker' )
   , Maker = require( './maker' )
   , Runner = require( './runner' )
-  , program = require( 'commander' );
+  , program = require( 'commander' )
+  , config = require( './config.json' ); 
 
 program.version( '0.0.0' )
 	.option( '-t --test [match]', 'test matching cases' )
@@ -20,30 +21,17 @@ program.version( '0.0.0' )
 function Configuration() {
   var instance = this;
 
-  this.defPath = '/Users/mbusenitz/work/native_booksmart/Bookwright.pro',
-
+  this.defPath = config.defPath,
   this.workingDir = path.dirname( this.defPath );
-
+  this.buildDir = config.buildDir; 
+  this.sumFile = config.sumFile; 
+  this.target = config.target;
+  this.qmakeOptions = config.qmakeOptions;
+  
   // this.buildDir = path.resolve( 
   //   instance.workingDir, 
   //   path.join( '../', path.basename( instance.workingDir ) + '_build' ) 
   // ); 
-
-  this.buildDir = '/data/repositories/native_booksmart_build'; 
-  
-  this.sumFile = '.shasum';
-
-  this.target = 'BookWright.app/Contents/MacOS/BookWright';
-
-  this.qmakeOptions = [           
-    '-r',
-    '-spec',
-    'macx-clang',
-    'CONFIG+=debug',
-    'CONFIG+=x86_64',
-    'CONFIG+=declarative_debug',
-    'CONFIG+=qml_debug' 
-  ];
 }
 
 var config = new Configuration();
