@@ -8,11 +8,13 @@ function Configuration(commander, config) {
 
   assert( config.hasOwnProperty( 'defPath' ) ); 
   assert( config.hasOwnProperty( 'target' ) ); 
-  assert( config.hasOwnProperty( 'qmakeOptions' ) ); 
+  assert( config.hasOwnProperty( 'qmakeOptions' ) );
+  assert( config.hasOwnProperty( 'qmakePath' ) );
 
   this.defPath = config.defPath,
   this.target = config.target;
   this.qmakeOptions = config.qmakeOptions;
+  this.qmakePath = config.qmakePath;
 
   this.workingDir = path.dirname( this.defPath );
   
