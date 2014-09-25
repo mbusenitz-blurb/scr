@@ -12,11 +12,11 @@ function onOk(data) {
 	bufferOk
 		.split( '\n' )
 		.forEach( function( line ) {
-			bufferOk = bufferOk.substr( line.length + 1 ); 
 			var words = line.split( ' ' ); 
 			if (words) {
 				var word = words[words.length - 1].trim(); 
 				if (word.length) {
+					
 					var matches = word.match( '.*\/(.*)' ); 
 					if (matches) {
 						process.stdout.write( matches[1] + '\n' );
@@ -27,6 +27,8 @@ function onOk(data) {
 				}
 			}
 		} );
+
+	bufferOk = bufferOk.replace( /.*\n/, '' );
 }
 
 function onError(data) {
