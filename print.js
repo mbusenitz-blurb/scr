@@ -9,21 +9,24 @@ var bufferError = ''
 function onOk(data) {
 	bufferOk += data.toString();
 
-	var lines = bufferOk.split( '\n' );
-
-	lines.forEach( function( line ) {
-		bufferOk = bufferOk.substr( line.length + 1 ); 
-		var words = line.split( ' ' ); 
-		if (words) {
-			var word = words[words.length - 1].trim(); 
-			if (word.length) {
-				var matches = word.match( '.*\/(.*)' ); 
-				if (matches) {
-					process.stdout.write( matches[1] + '\n' );
+	bufferOk
+		.split( '\n' )
+		.forEach( function( line ) {
+			bufferOk = bufferOk.substr( line.length + 1 ); 
+			var words = line.split( ' ' ); 
+			if (words) {
+				var word = words[words.length - 1].trim(); 
+				if (word.length) {
+					var matches = word.match( '.*\/(.*)' ); 
+					if (matches) {
+						process.stdout.write( matches[1] + '\n' );
+					}
+					else {
+						process.stdout.write( word + '\n' );
+					}
 				}
 			}
-		}
-	} );
+		} );
 }
 
 function onError(data) {
