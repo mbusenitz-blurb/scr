@@ -1,7 +1,6 @@
 {
   "defPath": "/Users/mbusenitz/work/native_booksmart/Bookwright.pro", 
   "buildDir": "/data/repositories/native_booksmart_build", 
-  "sumFile": ".shasum",
   "target": "BookWright.app/Contents/MacOS/BookWright",
   "qmakeOptions": [           
     "-r",
@@ -11,5 +10,8 @@
     "CONFIG+=x86_64",
     "CONFIG+=declarative_debug",
     "CONFIG+=qml_debug" 
+  ], 
+  "runOptions": [
+    "--project=/Users/mbusenitz/assets/dummys/small_square_empty.blurb"
   ]
 }

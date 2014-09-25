@@ -23,15 +23,32 @@ function Configuration() {
 
   this.defPath = config.defPath,
   this.workingDir = path.dirname( this.defPath );
-  this.buildDir = config.buildDir; 
-  this.sumFile = config.sumFile; 
   this.target = config.target;
   this.qmakeOptions = config.qmakeOptions;
-  
-  // this.buildDir = path.resolve( 
-  //   instance.workingDir, 
-  //   path.join( '../', path.basename( instance.workingDir ) + '_build' ) 
-  // ); 
+
+  if (config.hasOwnProperty('buildDir')) {
+    this.buildDir = config.buildDir; 
+  }
+  else {
+    this.buildDir = path.resolve( 
+      this.workingDir, 
+      path.join( '../', path.basename( this.workingDir ) + '_build' ) 
+    );
+  }
+
+  if (config.hasOwnProperty('sumFile')) {
+    this.sumFile = config.sumFile;
+  }
+  else {
+    this.sumFile = '.shasum'; 
+  }
+
+  if (config.hasOwnProperty('runOptions')) {
+    this.runOptions = config.runOptions;
+  }
+  else {
+    this.runOptions = [];
+  }
 }
 
 var config = new Configuration();

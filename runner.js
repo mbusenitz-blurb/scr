@@ -9,11 +9,10 @@ function Runner(controller, options) {
 	
 	controller.on( 'run', function() { 
 
-	  	var path = join( options.buildDir, options.target )
-	  	  , args = options.hasOwnProperty( 'test' ) ? [ '-t', options.test ] : [];
+	  	var path = join( options.buildDir, options.target );
 
 	  	controller.emit( 'step', 'run' ); 
-		cp.spawn( path, [ '--project=~/assets/dummys/small_square_empty.blurb'], { stdio: 'inherit' } ); 
+		cp.spawn( path, options.runOptions, { stdio: 'inherit' } ); 
 	});
 }
 
