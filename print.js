@@ -7,13 +7,23 @@ var bufferError = ''
   , fileRegex = new RegExp( ".* " + relative + "(.*)" );
 
 function onOk(data) {
-	var matches;
 	bufferOk += data.toString();
-	matches = bufferOk.match( fileRegex );
-	if (matches) {
-		process.stdout.write( matches[1] + '\n' );
-		bufferOk = bufferOk.replace( fileRegex, '' );
-	}
+
+	var lines = bufferOk.split( '\n' );
+
+	lines.forEach( function( line ) {
+		bufferOk = bufferOk.substr( line.length + 1 ); 
+		var words = line.split( ' ' ); 
+		if (words) {
+			var word = words[words.length - 1].trim(); 
+			if (word.length) {
+				var matches = word.match( '.*\/(.*)' ); 
+				if (matches) {
+					process.stdout.write( matches[1] + '\n' );
+				}
+			}
+		}
+	} );
 }
 
 function onError(data) {
