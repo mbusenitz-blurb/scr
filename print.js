@@ -4,31 +4,36 @@ var bufferError = ''
   , bufferOk = ''
   , relative = '.*/native_booksmart/'
   , errRegex = new RegExp( ".*error:.*" )
-  , fileRegex = new RegExp( ".* " + relative + "(.*)" );
+  , fileRegex = new RegExp( ".* " + relative + "(.*)" )
+  , util = require( 'util' );
 
 function onOk(data) {
+	var matches;
 	bufferOk += data.toString();
 
-	bufferOk
-		.split( '\n' )
-		.forEach( function( line ) {
-			var words = line.split( ' ' ); 
-			if (words) {
-				var word = words[words.length - 1].trim(); 
-				if (word.length) {
-					
-					var matches = word.match( '.*\/(.*)' ); 
-					if (matches) {
-						process.stdout.write( matches[1] + '\n' );
-					}
-					else {
-						process.stdout.write( word + '\n' );
+	match = bufferOk.match( /.*?\n/ );
+	if (match) {
+		bufferOk = bufferOk.replace( /.*?\n/, '' );
+		match[0]
+			.split( '\n' )
+			.forEach( function( line ) {
+				var words = line.split( ' ' ); 
+				if (words) {
+					var word = words[words.length - 1].trim(); 
+					if (word.length) {
+						
+						var matches = word.match( '.*\/(.*)' ); 
+						if (matches) {
+							process.stdout.write( matches[1] + '\n' );
+						}
+						else {
+							process.stdout.write( word + '\n' );
+						}
 					}
 				}
-			}
-		} );
+			} );
 
-	bufferOk = bufferOk.replace( /.*\n/, '' );
+	}
 }
 
 function onError(data) {
