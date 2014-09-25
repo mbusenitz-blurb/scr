@@ -4,15 +4,35 @@ var bufferError = ''
   , bufferOk = ''
   , relative = '.*/native_booksmart/'
   , errRegex = new RegExp( ".*error:.*" )
-  , fileRegex = new RegExp( ".* " + relative + "(.*)" );
+  , fileRegex = new RegExp( ".* " + relative + "(.*)" )
+  , util = require( 'util' );
 
 function onOk(data) {
 	var matches;
 	bufferOk += data.toString();
-	matches = bufferOk.match( fileRegex );
-	if (matches) {
-		process.stdout.write( matches[1] + '\n' );
-		bufferOk = bufferOk.replace( fileRegex, '' );
+
+	match = bufferOk.match( /.*?\n/ );
+	if (match) {
+		bufferOk = bufferOk.replace( /.*?\n/, '' );
+		match[0]
+			.split( '\n' )
+			.forEach( function( line ) {
+				var words = line.split( ' ' ); 
+				if (words) {
+					var word = words[words.length - 1].trim(); 
+					if (word.length) {
+						
+						var matches = word.match( '.*\/(.*)' ); 
+						if (matches) {
+							process.stdout.write( matches[1] + '\n' );
+						}
+						else {
+							process.stdout.write( word + '\n' );
+						}
+					}
+				}
+			} );
+
 	}
 }
 

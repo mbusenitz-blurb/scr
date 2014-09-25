@@ -9,7 +9,12 @@ var assert = require( 'assert' )
   , Qmaker = require( './qmaker' )
   , Maker = require( './maker' )
   , Runner = require( './runner' )
-  , program = require( 'commander' );
+  , Configuration = require( './configuration' )
+  , program = require( 'commander' )
+  , config = require( './config.json' ); 
+
+var controller = new events.EventEmitter()
+  , config = new Configuration(controller, config);
 
 program.version( '0.0.0' )
 	.option( '-t --test [match]', 'test matching cases' )
@@ -17,45 +22,12 @@ program.version( '0.0.0' )
   .option( '-m --make', 'only run make' )
   .parse( process.argv );
 
-function Configuration() {
-  var instance = this;
-
-  this.defPath = '/Users/mbusenitz/work/native_booksmart/Bookwright.pro',
-
-  this.workingDir = path.dirname( this.defPath );
-
-  this.buildDir = '/data/repositories/native_booksmart_build'; 
-
-  // this.buildDir = path.resolve( 
-  //   instance.workingDir, 
-  //   path.join( '../', path.basename( instance.workingDir ) + '_build' ) 
-  // ); 
-
-  this.sumFile = '.shasum';
-
-  this.target = 'TestBookWright.app/Contents/MacOS/TestBookWright';
-
-  this.qmakeOptions = [           
-    '-r',
-    '-spec',
-    'macx-clang',
-    'CONFIG+=debug',
-    'CONFIG+=x86_64',
-    'CONFIG+=declarative_debug',
-    'CONFIG+=qml_debug', 
-    'CONFIG+=testmake'
-  ];
-}
-
-var config = new Configuration();
-
 if (program.test) {
 	config.test = program.test;
 }
 
 if (program.qmake) {
-  var controller = new events.EventEmitter()
-    , generator = new Generator( controller, config )
+  var generator = new Generator( controller, config )
     , consView = new Console( controller )
     , notifer = new Notifier( controller )
     , qmaker = new Qmaker( controller, config ); 
@@ -63,8 +35,7 @@ if (program.qmake) {
   controller.emit( 'check' );
 }
 else if (program.make) {
-  var controller = new events.EventEmitter()
-    , generator = new Generator( controller, config )
+  var generator = new Generator( controller, config )
     , consView = new Console( controller )
     , notifer = new Notifier( controller )
     , maker = new Maker( controller, config ); 
@@ -73,8 +44,7 @@ else if (program.make) {
 }
 else {
 
-  var controller = new events.EventEmitter()
-    , generator = new Generator( controller, config )
+  var generator = new Generator( controller, config )
     , consView = new Console( controller )
     , notifer = new Notifier( controller )
     , qmaker = new Qmaker( controller, config )

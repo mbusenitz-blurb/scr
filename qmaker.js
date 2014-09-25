@@ -16,11 +16,11 @@ function Qmaker(controller, options ) {
 		
 		var args = [];
 		args.push( options.defPath ); 
-		args.concat( options.qmakeOptions );
-		args.concat( '-o', path.join( options.buildDir, 'Makefile' ) ); 
+		args = args.concat( options.qmakeOptions );
+		args = args.concat( '-o', path.join( options.buildDir, 'Makefile' ) ); 
 
 		var emitter = base.makeProcessor({ 
-				cmd: '/Users/mbusenitz/Qt5.2.1/5.2.1/clang_64/bin/qmake', 
+				cmd: options.qmakePath, 
 				args: args, 
 				cwd: options.buildDir 
 			});
