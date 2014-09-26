@@ -4,17 +4,15 @@ var assert = require( 'assert' )
 
 function Runner(controller, options) {
 
-	assert( typeof options !== 'undefined' );
-	assert( options.hasOwnProperty( 'buildDir' ) ); 
-	
-	controller.on( 'run', function() { 
+  assert( typeof options !== 'undefined' );
+  assert( options.hasOwnProperty( 'buildDir' ) );
 
-	  	var path = join( options.buildDir, options.target );
+  controller.on( 'run', function() {
 
-	  	controller.emit( 'step', 'run' ); 
-		cp.spawn( path, options.runOptions, { stdio: 'inherit' } ); 
-	});
+    var path = join( options.buildDir, options.target );
+    controller.emit( 'step', 'run' );
+    cp.spawn( path, options.runOptions, { stdio: 'inherit' } );
+  });
 }
 
-module.exports = Runner;	
-
+module.exports = Runner;
