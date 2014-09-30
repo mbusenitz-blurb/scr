@@ -1,30 +1,28 @@
 #!/usr/bin/env node
 
 var assert = require( 'assert' )
+  , path = require( 'path' )
   , base = require( './base' );
 
 function Qmaker(controller, options ) {
 
 	assert( typeof options !== 'undefined' );
 	assert( typeof options.hasOwnProperty( 'workingDir' ) );	
+	assert( typeof options.hasOwnProperty( 'buildDir' ) );	
+
+	console.log( path.join( options.buildDir, 'Makefile' ) );
 
 	controller.on( 'generate', function() {
+		
+		var args = [];
+		args.push( options.defPath ); 
+		args = args.concat( options.qmakeOptions );
+		args = args.concat( '-o', path.join( options.buildDir, 'Makefile' ) ); 
+
 		var emitter = base.makeProcessor({ 
-				cmd: '/Users/mbusenitz/Qt5.2.1/5.2.1/clang_64/bin/qmake', 
-				args: [ 
-					'/data/repositories/native_booksmart/Bookwright.pro',
-					'-r',
-					'-spec',
-					'macx-clang',
-					'CONFIG+=debug',
-					'CONFIG+=x86_64',
-					'CONFIG+=declarative_debug',
-					'CONFIG+=qml_debug', 
-					'CONFIG+=testmake',
-					'-o', 
-					'/data/repositories/native_booksmart_test/Makefile'
-				], 
-				cwd: options.workingDir 
+				cmd: options.qmakePath, 
+				args: args, 
+				cwd: options.buildDir 
 			});
 
 		emitter.once( 'exit', function( code, signal ) { 

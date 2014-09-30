@@ -2,35 +2,54 @@
 
 var assert = require( 'assert' )
   , events = require( 'events' )
+  , path = require( 'path' )
   , Notifier = require( './views/notifier' )
   , Console = require( './views/console' )
   , Generator = require( './generator' )
   , Qmaker = require( './qmaker' )
   , Maker = require( './maker' )
   , Runner = require( './runner' )
-  , program = require( 'commander' );
+  , Configuration = require( './configuration' )
+  , program = require( 'commander' )
+  , config = require( './config.json' ); 
+
+var controller = new events.EventEmitter()
+  , config = new Configuration(controller, config);
 
 program.version( '0.0.0' )
 	.option( '-t --test [match]', 'test matching cases' )
-	.parse( process.argv );
-
-var options = {
-	defPath: '/data/repositories/native_booksmart/Bookwright.pro', 
-	buildDir: '/data/repositories/native_booksmart_test/', 
-	sumFile: '.shasum', 
-	workingDir: '/data/repositories/native_booksmart/'
-};
+  .option( '-q --qmake', 'only run qmake' )
+  .option( '-m --make', 'only run make' )
+  .parse( process.argv );
 
 if (program.test) {
-	options.test = program.test;
+	config.test = program.test;
 }
 
-var controller = new events.EventEmitter()
-  , generator = new Generator( controller, options )
-  , consView = new Console( controller )
-  , notifer = new Notifier( controller )
-  , qmaker = new Qmaker( controller, options )
-  , maker = new Maker( controller, options )
-  , runner = new Runner( controller, options ); 
+if (program.qmake) {
+  var generator = new Generator( controller, config )
+    , consView = new Console( controller )
+    , notifer = new Notifier( controller )
+    , qmaker = new Qmaker( controller, config ); 
 
-controller.emit( 'check' );
+  controller.emit( 'check' );
+}
+else if (program.make) {
+  var generator = new Generator( controller, config )
+    , consView = new Console( controller )
+    , notifer = new Notifier( controller )
+    , maker = new Maker( controller, config ); 
+
+  controller.emit( 'build' );
+}
+else {
+
+  var generator = new Generator( controller, config )
+    , consView = new Console( controller )
+    , notifer = new Notifier( controller )
+    , qmaker = new Qmaker( controller, config )
+    , maker = new Maker( controller, config )
+    , runner = new Runner( controller, config ); 
+
+  controller.emit( 'check' );
+}
