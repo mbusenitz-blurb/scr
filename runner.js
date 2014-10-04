@@ -7,9 +7,9 @@ function Runner(controller, options) {
   assert( typeof options !== 'undefined' );
   assert( options.hasOwnProperty( 'buildDir' ) );
 
-  controller.on( 'run', function() {
+  controller.on( 'run', function( sum ) {
 
-    var path = join( options.buildDir, options.target );
+    var path = join( options.buildDir, sum, options.target );
     controller.emit( 'step', 'run' );
     cp.spawn( path, options.runOptions, { stdio: 'inherit' } );
   });

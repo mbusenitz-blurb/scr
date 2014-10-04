@@ -11,7 +11,7 @@ function Configuration(commander, config) {
   assert( config.hasOwnProperty( 'qmakeOptions' ) );
   assert( config.hasOwnProperty( 'qmakePath' ) );
 
-  this.defPath = config.defPath,
+  this.defPath = path.join( __dirname, config.defPath );
   this.target = config.target;
   this.qmakeOptions = config.qmakeOptions;
   this.qmakePath = config.qmakePath;
@@ -19,7 +19,7 @@ function Configuration(commander, config) {
   this.workingDir = path.dirname( this.defPath );
   
   if (config.hasOwnProperty('buildDir')) {
-    this.buildDir = config.buildDir; 
+    this.buildDir = path.join( __dirname, config.buildDir ); 
   }
   else {
     this.buildDir = path.resolve( 

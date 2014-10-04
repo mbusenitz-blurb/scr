@@ -1,7 +1,7 @@
 {
-  "defPath": "/Users/mbusenitz/work/native_booksmart/Bookwright.pro", 
-  "buildDir": "/data/repositories/native_booksmart_build", 
-  "target": "TestBookWright.app/Contents/MacOS/TestBookWright",
+  "defPath": "../../Bookwright.pro",  
+  "buildDir": "../../build", 
+  "target": "BookWright.app/Contents/MacOS/BookWright",
   "qmakeOptions": [           
     "-r",
     "-spec",
@@ -9,12 +9,7 @@
     "CONFIG+=debug",
     "CONFIG+=x86_64",
     "CONFIG+=declarative_debug",
-    "CONFIG+=qml_debug",
-    "CONFIG+=testmake"
+    "CONFIG+=qml_debug" 
   ], 
-  "runOptions": [
-    "-t",
-    "*ChunkedUploaderTest*"
-  ],
   "qmakePath": "/Users/mbusenitz/Qt5.2.1/5.2.1/clang_64/bin/qmake"
 }

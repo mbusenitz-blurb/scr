@@ -24,10 +24,15 @@ function Console( controller ) {
 
 	controller.on( 'generate', function( sum ) {
 		cursor.green();
-		console.log( 'generate build ' + sum ); 
+		console.log( 'generate ' + sum ); 
 		cursor.reset();
 	}); 
 
+	controller.on( 'build', function( sum ) {
+		cursor.green();
+		console.log( 'build ' + sum ); 
+		cursor.reset();
+	}); 
 }
 
 module.exports = Console; 
