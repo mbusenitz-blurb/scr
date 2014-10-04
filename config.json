@@ -1,7 +1,7 @@
 {
   "defPath": "../../Bookwright.pro",  
   "buildDir": "../../build", 
-  "target": "BookWright.app/Contents/MacOS/BookWright",
+  "target": "TestBookWright.app/Contents/MacOS/TestBookWright",
   "qmakeOptions": [           
     "-r",
     "-spec",
@@ -9,7 +9,8 @@
     "CONFIG+=debug",
     "CONFIG+=x86_64",
     "CONFIG+=declarative_debug",
-    "CONFIG+=qml_debug" 
+    "CONFIG+=qml_debug", 
+    "CONFIG+=testmake"
   ], 
   "qmakePath": "/Users/mbusenitz/Qt5.2.1/5.2.1/clang_64/bin/qmake"
 }
