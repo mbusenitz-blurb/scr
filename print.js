@@ -21,18 +21,13 @@ function onOk(data) {
 				if (words) {
 					var word = words[words.length - 1].trim(); 
 					if (word.length) {
-						
 						var matches = word.match( '.*\/(.*)' ); 
 						if (matches) {
 							process.stdout.write( matches[1] + '\n' );
 						}
-						else {
-							process.stdout.write( word + '\n' );
-						}
 					}
 				}
 			} );
-
 	}
 }
 

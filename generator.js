@@ -2,6 +2,7 @@
 
 var assert = require( 'assert' )
   , fs = require( 'fs' )
+  , path = require( 'path' )
   , crypto = require( 'crypto' )
   , join = require( 'path' ).join
   , base = require( './base' );
@@ -32,20 +33,30 @@ function Generator(controller, options) {
       if (err) throw err;
       else {
         
-        var sum = calcSum(defData, options.qmakeOptions );
+        var sum = calcSum(defData, options.qmakeOptions )
+          , fullBuilDir = path.join( options.buildDir, sum );
+
         fs.exists( options.buildDir, function( exists ) {
           if (!exists) {
             fs.mkdir( options.buildDir, function() {
-              controller.emit( 'generate', sum );
-            }); 
+              fs.mkdir( fullBuilDir, function() {
+                controller.emit( 'generate', sum );
+              } );
+            } );
           }
           else {
-            fs.readFile( sumPath, function( err, sumData ) {
-              var equals = !err && sumData.toString() == sum;
-              controller.emit( equals ? 'build' : 'generate', sum );
-            });    
+            fs.exists( fullBuilDir, function( exists ) {
+              if (!exists) {
+                fs.mkdir( fullBuilDir, function() {
+                  controller.emit( 'generate', sum );
+                } );
+              }
+              else {
+                controller.emit( 'build', sum );
+              }
+            } );
           }
-        }); 
+        } ); 
 
         function calcSum(defData, qmakeOptions) {
           var sum = crypto

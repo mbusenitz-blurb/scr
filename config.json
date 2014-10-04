@@ -1,6 +1,6 @@
 {
-  "defPath": "/Users/mbusenitz/work/native_booksmart/Bookwright.pro", 
-  "buildDir": "/data/repositories/native_booksmart_build", 
+  "defPath": "../../Bookwright.pro",  
+  "buildDir": "../../build", 
   "target": "BookWright.app/Contents/MacOS/BookWright",
   "qmakeOptions": [           
     "-r",
@@ -11,8 +11,5 @@
     "CONFIG+=declarative_debug",
     "CONFIG+=qml_debug" 
   ], 
-  "runOptions": [
-    "--project=/Users/mbusenitz/assets/dummys/small_square_empty.blurb"
-  ],
   "qmakePath": "/Users/mbusenitz/Qt5.2.1/5.2.1/clang_64/bin/qmake"
 }

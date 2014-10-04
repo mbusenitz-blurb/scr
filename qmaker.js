@@ -10,14 +10,13 @@ function Qmaker(controller, options ) {
 	assert( typeof options.hasOwnProperty( 'workingDir' ) );	
 	assert( typeof options.hasOwnProperty( 'buildDir' ) );	
 
-	console.log( path.join( options.buildDir, 'Makefile' ) );
-
-	controller.on( 'generate', function() {
+	controller.on( 'generate', function( sum ) {
 		
 		var args = [];
+
 		args.push( options.defPath ); 
 		args = args.concat( options.qmakeOptions );
-		args = args.concat( '-o', path.join( options.buildDir, 'Makefile' ) ); 
+		args = args.concat( '-o', path.join( options.buildDir, sum, 'Makefile' ) ); 
 
 		var emitter = base.makeProcessor({ 
 				cmd: options.qmakePath, 
@@ -27,7 +26,7 @@ function Qmaker(controller, options ) {
 
 		emitter.once( 'exit', function( code, signal ) { 
 			if (!code) {
-				controller.emit( 'build' );
+				controller.emit( 'build', sum );
 			}
 		});
 

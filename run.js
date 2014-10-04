@@ -17,33 +17,36 @@ var controller = new events.EventEmitter()
   , config = new Configuration(controller, config);
 
 program.version( '0.0.0' )
-	.option( '-t --test [match]', 'test matching cases' )
-  .option( '-q --qmake', 'only run qmake' )
-  .option( '-m --make', 'only run make' )
+	.option( '-b --build', 'only build' )
+  .option( '-r --run', 'only run target' )
   .parse( process.argv );
 
 if (program.test) {
 	config.test = program.test;
 }
 
-if (program.qmake) {
+if (program.build) {
   var generator = new Generator( controller, config )
     , consView = new Console( controller )
     , notifer = new Notifier( controller )
-    , qmaker = new Qmaker( controller, config ); 
+    , qmaker = new Qmaker( controller, config )
+    , maker = new Maker( controller, config ); 
 
   controller.emit( 'check' );
 }
-else if (program.make) {
+else if (program.run) {
   var generator = new Generator( controller, config )
     , consView = new Console( controller )
     , notifer = new Notifier( controller )
-    , maker = new Maker( controller, config ); 
+    , runner = new Runner( controller, config ); 
 
-  controller.emit( 'build' );
+  controller.on( 'build', function( sum ) {
+    controller.emit( 'run', sum );
+  } );
+
+  controller.emit( 'check' );
 }
 else {
-
   var generator = new Generator( controller, config )
     , consView = new Console( controller )
     , notifer = new Notifier( controller )
