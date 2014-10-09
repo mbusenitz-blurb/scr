@@ -2,7 +2,7 @@
 
 var assert = require( 'assert' )
   , path = require( 'path' )
-  , base = require( './base' );
+  , cp = require( 'child_process' );
 
 function Qmaker(controller, options ) {
 
@@ -10,29 +10,43 @@ function Qmaker(controller, options ) {
 	assert( typeof options.hasOwnProperty( 'workingDir' ) );	
 	assert( typeof options.hasOwnProperty( 'buildDir' ) );	
 
-	console.log( path.join( options.buildDir, 'Makefile' ) );
-
-	controller.on( 'generate', function() {
+	controller.on( 'generate', function( sum ) {
 		
-		var args = [];
-		args.push( options.defPath ); 
-		args = args.concat( options.qmakeOptions );
-		args = args.concat( '-o', path.join( options.buildDir, 'Makefile' ) ); 
+		var qmake = path.join( options.qmakePath, 'qmake' );
 
-		var emitter = base.makeProcessor({ 
-				cmd: options.qmakePath, 
-				args: args, 
-				cwd: options.buildDir 
-			});
-
-		emitter.once( 'exit', function( code, signal ) { 
-			if (!code) {
-				controller.emit( 'build' );
+		cp.exec( qmake + ' -v', function(error, stdout, stderr) {
+			if (error) {
+				throw error;
 			}
-		});
+			else {
+				var args = []
+		 		  , child;
 
-		controller.emit( 'step', 'qmake' ); 
-		emitter.emit( 'execute' );
+				controller.emit( 'step', 'generate', sum, stdout ); 
+
+				args.push( options.defPath ); 
+				args = args.concat( options.qmakeOptions );
+				args = args.concat( '-o', path.join( options.buildDir, sum, 'Makefile' ) ); 
+
+				child = cp.spawn( 
+					qmake, 
+					args, 
+					{ 
+					  cwd: options.buildDir, 
+					  stdio: 'inherit'
+					} 
+				);
+
+				child.on( 'exit', function( code, signal ) {
+					if (!code) {
+						controller.emit( 'build', sum );
+					}
+					else {
+						controller.emit( 'exit', code, signal ); 
+					}
+				});
+			}
+		} );
 	});
 
 }
