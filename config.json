@@ -1,6 +1,6 @@
 {
-  "defPath": "../native_booksmart/Bookwright.pro",  
-  "buildDir": "../native_booksmart/build", 
+  "defPath": "../../Bookwright.pro",  
+  "buildDir": "../../build", 
   "qmakeOptions": [           
     "-r",
     "-spec",
