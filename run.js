@@ -16,43 +16,31 @@ var assert = require( 'assert' )
 var controller = new events.EventEmitter()
   , config = new Configuration(controller, config);
 
-program.version( '0.0.0' )
+program.version( '0.0.1' )
 	.option( '-b --build', 'only build' )
-  .option( '-r --run', 'only run target' )
+  .option( '-q --qmake', 'force qmake' )
+  .option( '-t --test', 'test target' )
   .parse( process.argv );
 
 if (program.test) {
-	config.test = program.test;
-}
-
-if (program.build) {
-  var generator = new Generator( controller, config )
-    , consView = new Console( controller )
-    , notifer = new Notifier( controller )
-    , qmaker = new Qmaker( controller, config )
-    , maker = new Maker( controller, config ); 
-
-  controller.emit( 'check' );
-}
-else if (program.run) {
-  var generator = new Generator( controller, config )
-    , consView = new Console( controller )
-    , notifer = new Notifier( controller )
-    , runner = new Runner( controller, config ); 
-
-  controller.on( 'build', function( sum ) {
-    controller.emit( 'run', sum );
-  } );
-
-  controller.emit( 'check' );
+  config.qmakeOptions += ",CONFIG+=testmake";
+  config.target = "TestBookWright.app/Contents/MacOS/TestBookWright";
+  config.test = program.test;
 }
 else {
-  var generator = new Generator( controller, config )
-    , consView = new Console( controller )
-    , notifer = new Notifier( controller )
-    , qmaker = new Qmaker( controller, config )
-    , maker = new Maker( controller, config )
-    , runner = new Runner( controller, config ); 
-
-  controller.emit( 'check' );
+  config.target = "BookWright.app/Contents/MacOS/BookWright";
 }
+
+config.forceQmake = program.qmake;
+
+var generator = new Generator( controller, config )
+  , consView = new Console( controller )
+  , notifer = new Notifier( controller )
+  , qmaker = new Qmaker( controller, config )
+  , maker = new Maker( controller, config ); 
+
+if (!program.build) {
+  var runner = new Runner( controller, config );
+}
+
+controller.emit( 'check' );

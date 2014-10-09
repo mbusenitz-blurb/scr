@@ -7,12 +7,10 @@ function Configuration(commander, config) {
   var instance = this;
 
   assert( config.hasOwnProperty( 'defPath' ) ); 
-  assert( config.hasOwnProperty( 'target' ) ); 
   assert( config.hasOwnProperty( 'qmakeOptions' ) );
   assert( config.hasOwnProperty( 'qmakePath' ) );
 
   this.defPath = path.join( __dirname, config.defPath );
-  this.target = config.target;
   this.qmakeOptions = config.qmakeOptions;
   this.qmakePath = config.qmakePath;
 
@@ -26,13 +24,6 @@ function Configuration(commander, config) {
       this.workingDir, 
       path.join( '../', path.basename( this.workingDir ) + '_build' ) 
     );
-  }
-
-  if (config.hasOwnProperty('sumFile')) {
-    this.sumFile = config.sumFile;
-  }
-  else {
-    this.sumFile = '.shasum'; 
   }
 
   if (config.hasOwnProperty('runOptions')) {

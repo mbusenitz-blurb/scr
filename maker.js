@@ -4,7 +4,7 @@ var assert = require( 'assert' )
   , events = require( 'events' )
   , path = require( 'path' )
   , printer = require( './print.js' )
-  , base = require( './base' );
+  , cp = require( 'child_process' );
 
 function Maker(controller, options) {
 
@@ -12,19 +12,26 @@ function Maker(controller, options) {
   assert( options.hasOwnProperty( 'buildDir' ) );
 
   controller.on( 'build', function( sum ) {
-    var emitter = base.makeProcessor({ 
-        cmd: 'make',
-        args: [ '-j', '8' ],
-        cwd: path.join( options.buildDir, sum )
-      }, printer );
+    
+    var child = cp.spawn( 
+      'make', 
+      [ '-j', '8' ], 
+      { cwd: path.join( options.buildDir, sum ) }
+    ); 
 
-    emitter.on( 'exit', function( code, signal ) {
+    controller.emit( 'step', 'make', sum );
+
+    child.on( 'exit', function( code, signal ) {
       if (!code) {
         controller.emit( 'run', sum );
       }
+    } );
+
+    child.stdout.on( 'data', printer.onOk );
+    child.stderr.once( 'data', function(data) {
+      controller.emit( 'build error', data.toString() );
+      child.kill( 'SIGCHLD' );
     });
-    controller.emit( 'step', 'make' );
-    emitter.emit( 'execute' );
   });
 }
 

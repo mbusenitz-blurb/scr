@@ -9,9 +9,11 @@ function Runner(controller, options) {
 
   controller.on( 'run', function( sum ) {
 
-    var path = join( options.buildDir, sum, options.target );
-    controller.emit( 'step', 'run' );
-    cp.spawn( path, options.runOptions, { stdio: 'inherit' } );
+    var path = join( options.buildDir, sum, options.target )
+      , child; 
+
+    controller.emit( 'step', 'run', sum );
+    child = cp.spawn( path, options.runOptions, { stdio: 'inherit' } );
   });
 }
 
