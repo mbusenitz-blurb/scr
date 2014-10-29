@@ -7,8 +7,10 @@ var assert = require( 'assert' )
 function Qmaker(controller, options ) {
 
 	assert( typeof options !== 'undefined' );
-	assert( typeof options.hasOwnProperty( 'workingDir' ) );	
-	assert( typeof options.hasOwnProperty( 'buildDir' ) );	
+	assert( options.hasOwnProperty( 'workingDir' ) );	
+	assert( options.hasOwnProperty( 'buildDir' ) );	
+	assert( options.hasOwnProperty( 'qmakeOptions' ) ); 
+	assert( Array.isArray( options.qmakeOptions ) ); 
 
 	controller.on( 'generate', function( sum ) {
 		

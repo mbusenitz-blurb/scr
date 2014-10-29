@@ -23,7 +23,7 @@ program.version( '0.0.1' )
   .parse( process.argv );
 
 if (program.test) {
-  config.qmakeOptions += ",CONFIG+=testmake";
+  config.qmakeOptions.push( "CONFIG+=testmake" );
   config.target = "TestBookWright.app/Contents/MacOS/TestBookWright";
   config.test = program.test;
 }
