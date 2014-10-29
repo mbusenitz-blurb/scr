@@ -13,7 +13,10 @@ function Runner(controller, options) {
       , child; 
 
     controller.emit( 'step', 'run', sum );
-    child = cp.spawn( path, options.runOptions, { stdio: 'inherit' } );
+
+    cp.exec( 'killall BookWright', function(error, stdout, stderr) {
+      cp.spawn( path, options.runOptions, { stdio: 'inherit' } );
+    } ); 
   });
 }
 
