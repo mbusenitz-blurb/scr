@@ -1,10 +1,18 @@
 #!/usr/bin/env node
 
-var socketio = require('socket.io-client')
-  , socket = socketio.connect('http://localhost:3001');
+var client = require('socket.io-client')
+  , prompt = require('prompt')
+  , socket = client.connect('http://localhost:3001');
 
 socket.on('connect', function () {
-	socket.on( 'data', function( data ) {
-		process.stdout.write( data.toString() ); 
-	});
+	prompt.start();
+	readCommand();
+
+	function readCommand() {
+		prompt.get( ['command'], function(err, result) {
+			if (err) throw err;
+			socket.emit( 'command', result );	
+			readCommand(); 
+		});
+	}
 });

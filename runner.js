@@ -45,40 +45,41 @@ function Runner(controller, options) {
       else {
         var output = '';  
         
-        child = cp.spawn( path, options.runOptions, { stdio: 'pipe' } )
-        child.stdout.on( 'data', function( data ) { 
-          output += data.toString();
-          if (connection) {
-            connection.emit( 'data', data );
-          }
-        } ); 
+        child = cp.spawn( path, options.runOptions, { stdio: [ 'pipe', 'inherit', 'inherit' ] } )
+        
+        // child.stdout.on( 'data', function( data ) { 
+        //   output += data.toString();
+        //   if (connection) {
+        //     connection.emit( 'data', data );
+        //   }
+        // } ); 
 
-        child.stderr.on( 'data', function( data ) { 
-          output += data.toString();
-          if (connection) {
-            connection.emit( 'data', data );
-          }
-        } );
+        // child.stderr.on( 'data', function( data ) { 
+        //   output += data.toString();
+        //   if (connection) {
+        //     connection.emit( 'data', data );
+        //   }
+        // } );
 
-        prompt.start();
-        read();
-        function read() {
-          prompt.get( ['command'], function( err, result ) {
-            if (err) 
-              console.log( err );
-            if (result.command === 'pipe') {
-              prompt.get( [ 'input' ], function( err, result ) {
-                child.stdin.write( result.input + '\n' );
-                read();
-              });
-            }
-            else if (result.command === 'dump') {
-              process.stdout.write( output );
-              output = '';
-              read();
-            }
-          });
-        }
+        // prompt.start();
+        // read();
+        // function read() {
+        //   prompt.get( ['command'], function( err, result ) {
+        //     if (err) 
+        //       console.log( err );
+        //     if (result.command === 'pipe') {
+        //       prompt.get( [ 'input' ], function( err, result ) {
+        //         child.stdin.write( result.input + '\n' );
+        //         read();
+        //       });
+        //     }
+        //     else if (result.command === 'dump') {
+        //       process.stdout.write( output );
+        //       output = '';
+        //       read();
+        //     }
+        //   });
+        // }
       }
     } );
   });
