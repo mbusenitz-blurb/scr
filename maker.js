@@ -12,12 +12,32 @@ function Maker(controller, options) {
   assert( options.hasOwnProperty( 'buildDir' ) );
 
   controller.on( 'build', function( sum ) {
-    
-    var child = cp.spawn( 
-      'make', 
-      [ '-j', '8' ], 
-      { cwd: path.join( options.buildDir, sum ) }
-    ); 
+
+    var child
+      , args = { 
+          cwd: path.join( options.buildDir, sum )
+      }; 
+
+    if (options.xcode)
+    {
+      child = cp.spawn(
+        'xcodebuild',
+        [ '-project', options.xcodeProject ],
+        args
+      );
+    }
+    else
+    {
+      console.log( '****', args );
+
+      child = cp.spawn( 
+        'make', 
+        [ '-j', '8' ],
+        args
+      );
+
+      console.log( '****', args ); 
+    }
 
     controller.emit( 'step', 'make', sum );
 
@@ -28,9 +48,9 @@ function Maker(controller, options) {
     } );
 
     child.stdout.on( 'data', printer.onOk );
-    child.stderr.once( 'data', function(data) {
+    child.stderr.on( 'data', function(data) {
       controller.emit( 'build error', data.toString() );
-      child.kill( 'SIGCHLD' );
+      //child.kill( 'SIGCHLD' );
     });
   });
 }
