@@ -8,6 +8,20 @@ function Notifier( controller ) {
 	controller.on( 'step', function(step) {
 		current = step;
 	}); 
+
+	controller.on( 'build error', function(msg) {
+		instance.notify({
+			title: current + " failed!", 
+			message: msg
+		}); 
+	});
+
+	controller.on( 'assert failed', function(msg) {
+		instance.notify({
+			title: "assert failed!", 
+			message: msg
+		}); 
+	});
 	
 	controller.on( 'exit', function(code, signal) {
 		if (code) {

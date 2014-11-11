@@ -1,5 +1,6 @@
 var ansi = require( 'ansi' )
-  , cursor = ansi( process.stdout ); 
+  , cursor = ansi( process.stdout )
+  , inspect = require( 'util' ).inspect;
 
 function Console( controller ) {
 	var prev; 
@@ -12,22 +13,32 @@ function Console( controller ) {
 		}
 	});
 
+	controller.on( 'build error', function(msg) {
+		cursor.red(); 
+		console.log( msg ); 
+		cursor.reset();
+	});
+
+	controller.on( 'assert failed', function(msg) {
+		cursor.red(); 
+		console.log( 'assert failed!', msg ); 
+		cursor.reset();
+	});
+
 	controller.on( 'step', function(step) {
 		cursor.green();
 		if(prev) 
+		{
 			console.timeEnd( prev );
-		console.log( step );
+			console.log( '' );
+		}
 		console.time( step );
+		for (var i = 0; i < arguments.length; ++i) {
+			console.log( arguments[i].trim() );
+		}
 		cursor.reset();
 		prev = step;
 	}); 
-
-	controller.on( 'generate', function( sum ) {
-		cursor.green();
-		console.log( 'generate build ' + sum ); 
-		cursor.reset();
-	}); 
-
 }
 
 module.exports = Console; 

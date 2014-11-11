@@ -2,50 +2,59 @@
 
 var assert = require( 'assert' )
   , fs = require( 'fs' )
+  , path = require( 'path' )
   , crypto = require( 'crypto' )
-  , join = require( 'path' ).join
-  , base = require( './base' );
-
+  , join = require( 'path' ).join;
 
 function Generator(controller, options) {
-
-  var sumPath; 
 
   assert( typeof options !== 'undefined' );
   assert( options.hasOwnProperty( 'defPath' ) ); 
   assert( options.hasOwnProperty( 'buildDir' ) ); 
-  assert( options.hasOwnProperty( 'sumFile' ) );
-
-  sumPath = join( options.buildDir, options.sumFile ); 
-
-  controller.on( 'generate', function(sum) {
-    fs.writeFile( sumPath, sum, function(err) {
-      if (err) throw err;
-    } );
-  });
-
+  
   controller.on( 'check', function() {
     controller.emit( 'step', 'check' ); 
 
     fs.readFile( options.defPath, function( err, defData) {
-      
-      if (err) throw err;
+      if (err) {
+        controller.emit( 'exit', err.errno, err.code );
+        console.log( err ); 
+      }
       else {
         
         var sum = calcSum(defData, options.qmakeOptions );
-        fs.exists( options.buildDir, function( exists ) {
-          if (!exists) {
-            fs.mkdir( options.buildDir, function() {
-              controller.emit( 'generate', sum );
-            }); 
-          }
-          else {
-            fs.readFile( sumPath, function( err, sumData ) {
-              var equals = !err && sumData.toString() == sum;
-              controller.emit( equals ? 'build' : 'generate', sum );
-            });    
-          }
-        }); 
+
+        if (options.forceQmake) {
+          controller.emit( 'generate', sum );
+        }
+        else {
+          var fullBuildDir = path.join( options.buildDir, sum );
+
+          fs.exists( options.buildDir, function( exists ) {
+            if (!exists) {
+              fs.mkdir( options.buildDir, function() {
+                fs.mkdir( fullBuildDir, function() {
+                  controller.emit( 'generate', sum );
+                } );
+              } );
+            }
+            else {
+              fs.exists( fullBuildDir, function( exists ) {
+                if (!exists) {
+                  fs.mkdir( fullBuildDir, function() {
+                    controller.emit( 'generate', sum );
+                  } );
+                }
+                else {
+                  var makeFile = path.join( fullBuildDir, 'MakeFile' );
+                  fs.exists( makeFile, function(exists) {
+                    controller.emit( exists ? 'build' : 'generate', sum );
+                  });
+                }
+              } );
+            }
+          } ); 
+        }
 
         function calcSum(defData, qmakeOptions) {
           var sum = crypto
