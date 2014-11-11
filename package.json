@@ -3,11 +3,19 @@
 		"test": "mocha -u tdd --recursive"
 	},
 	"dependencies": {
-		"ansi": "*", 
+		"ansi": "*",
 		"node-notifier": "*",
-		"chai": "*", 
+		"chai": "*",
 		"mocha": "*",
 		"mucbuc-jsthree": "*",
-		"commander": "*"
+		"commander": "*",
+		"applescript": "*",
+		"prompt": "*",
+		"socket.io": "*",
+		"socket.io-client": "*"
+	},
+	"preferGlobal": true,
+	"bin": {
+		"scr": "run.js"
 	}
 }
