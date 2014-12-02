@@ -10,10 +10,15 @@ function Runner(controller, options) {
   controller.on( 'run', function( sum ) {
 
     var path = join( options.buildDir, sum, options.target )
-      , child; 
+      , child;
 
     controller.emit( 'step', 'run', sum );
     child = cp.spawn( path, options.runOptions, { stdio: 'inherit' } );
+    child.on( 'exit', function(code,signal) {
+      if (code) {
+        process.exit( code );
+      }
+    });
   });
 }
 
