@@ -13,37 +13,20 @@ function Maker(controller, options) {
 
   controller.on( 'build', function( sum ) {
 
-    var child
-      , args = { 
-          cwd: path.join( options.buildDir, sum )
-      }; 
-
-    if (options.xcode)
-    {
-      child = cp.spawn(
-        'xcodebuild',
-        [ '-project', options.xcodeProject ],
-        args
-      );
-    }
-    else
-    {
-      console.log( '****', args );
-
-      child = cp.spawn( 
-        'make', 
-        [ '-j', '8' ],
-        args
-      );
-
-      console.log( '****', args ); 
-    }
+    var child = cp.spawn(
+      'make',
+      [ '-j', '8' ],
+      { cwd: path.join( options.buildDir, sum ) }
+    );
 
     controller.emit( 'step', 'make', sum );
 
     child.on( 'exit', function( code, signal ) {
       if (!code) {
         controller.emit( 'run', sum );
+      }
+      else {
+        process.exit( code );
       }
     } );
 

@@ -29,14 +29,8 @@ function Qmaker(controller, options ) {
 
 				args.push( options.defPath );
 				args = args.concat( options.qmakeOptions );
+				args = args.concat( '-o', path.join( options.buildDir, sum, 'Makefile' ) );
 
-				if (options.xcode) {
-					args = args.concat( '-o', path.join( options.buildDir, sum, options.targetName ) ); 
-				}
-				else {
-					args = args.concat( '-o', path.join( options.buildDir, sum, 'Makefile' ) );
-				}
-				
 				child = cp.spawn(
 					qmake,
 					args,
@@ -52,6 +46,9 @@ function Qmaker(controller, options ) {
 					}
 					else {
 						controller.emit( 'exit', code, signal );
+            if (code) {
+              process.exit( code );
+            }
 					}
 				});
 			}
