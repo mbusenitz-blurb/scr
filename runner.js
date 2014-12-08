@@ -9,13 +9,16 @@ function Runner(controller, options) {
 
   controller.on( 'run', function( sum ) {
 
-    var path = join( options.buildDir, sum, options.target )
-      , child; 
+    var path = join( options.buildDir, sum, options.target );
 
     controller.emit( 'step', 'run', sum );
-
     cp.exec( 'killall BookWright', function(error, stdout, stderr) {
-      cp.spawn( path, options.runOptions, { stdio: 'inherit' } );
+      var child = cp.spawn( path, options.runOptions, { stdio: 'inherit' } );
+      child.on( 'exit', function(code,signal) {
+        if (code) {
+          process.exit( code );
+        }
+      });
     } ); 
   });
 }

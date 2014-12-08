@@ -12,18 +12,21 @@ function Maker(controller, options) {
   assert( options.hasOwnProperty( 'buildDir' ) );
 
   controller.on( 'build', function( sum ) {
-    
-    var child = cp.spawn( 
-      'make', 
-      [ '-j', '8' ], 
+
+    var child = cp.spawn(
+      'make',
+      [ '-j', '8' ],
       { cwd: path.join( options.buildDir, sum ) }
-    ); 
+    );
 
     controller.emit( 'step', 'make', sum );
 
     child.on( 'exit', function( code, signal ) {
       if (!code) {
         controller.emit( 'run', sum );
+      }
+      else {
+        process.exit( code );
       }
     } );
 
