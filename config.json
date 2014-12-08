@@ -3,8 +3,6 @@
   "buildDir": "../../build",
   "qmakeOptions": [
     "-r",
-    "-spec",
-    "macx-clang",
     "CONFIG+=debug",
     "CONFIG+=x86_64",
     "CONFIG+=declarative_debug",

@@ -9,19 +9,19 @@ var assert = require( 'assert' )
 function Generator(controller, options) {
 
   assert( typeof options !== 'undefined' );
-  assert( options.hasOwnProperty( 'defPath' ) ); 
-  assert( options.hasOwnProperty( 'buildDir' ) ); 
-  
+  assert( options.hasOwnProperty( 'defPath' ) );
+  assert( options.hasOwnProperty( 'buildDir' ) );
+
   controller.on( 'check', function() {
-    controller.emit( 'step', 'check' ); 
+    controller.emit( 'step', 'check' );
 
     fs.readFile( options.defPath, function( err, defData) {
       if (err) {
         controller.emit( 'exit', err.errno, err.code );
-        console.log( err ); 
+        console.log( err );
       }
       else {
-        
+
         var sum = calcSum(defData, options.qmakeOptions );
 
         if (options.forceQmake) {
@@ -46,14 +46,14 @@ function Generator(controller, options) {
                   } );
                 }
                 else {
-                  var makeFile = path.join( fullBuildDir, 'MakeFile' );
+                  var makeFile = path.join( fullBuildDir, options.xcode ? options.xcodeProject : 'Makefile' );
                   fs.exists( makeFile, function(exists) {
                     controller.emit( exists ? 'build' : 'generate', sum );
                   });
                 }
               } );
             }
-          } ); 
+          } );
         }
 
         function calcSum(defData, qmakeOptions) {
@@ -62,11 +62,11 @@ function Generator(controller, options) {
             .update(defData)
             .update(qmakeOptions.toString())
             .digest('hex');
-          return sum; 
+          return sum;
         }
       }
     });
-  }); 
+  });
 }
 
 module.exports = Generator;

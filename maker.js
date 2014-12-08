@@ -31,9 +31,9 @@ function Maker(controller, options) {
     } );
 
     child.stdout.on( 'data', printer.onOk );
-    child.stderr.once( 'data', function(data) {
+    child.stderr.on( 'data', function(data) {
       controller.emit( 'build error', data.toString() );
-      child.kill( 'SIGCHLD' );
+      //child.kill( 'SIGCHLD' );
     });
   });
 }

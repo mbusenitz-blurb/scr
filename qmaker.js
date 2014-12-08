@@ -17,6 +17,7 @@ function Qmaker(controller, options ) {
 		var qmake = path.join( options.qmakePath, 'qmake' );
 
 		cp.exec( qmake + ' -v', function(error, stdout, stderr) {
+			
 			if (error) {
 				throw error;
 			}
