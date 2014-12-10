@@ -7,6 +7,6 @@
     "CONFIG+=x86_64",
     "CONFIG+=declarative_debug",
     "CONFIG+=qml_debug"
-  ],   
-  "qmakePath": "/Users/mbusenitz/Qt5.2.1/5.2.1/clang_64/bin"
+  ],
+  "qmakePath": "/Users/mbusenitz/Qt5.3.2/5.3/clang_64/bin"
 }

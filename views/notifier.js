@@ -1,4 +1,4 @@
-var Notification = require( 'node-notifier' );
+var notifier = require( 'node-notifier' );
 
 function Notifier( controller ) {
 
@@ -33,9 +33,8 @@ function Notifier( controller ) {
 	});
 }
 
-Notifier.prototype.notify = function( o ) {
-	var n = new Notification(); 
-	n.notify( o ); 
-}; 
+Notifier.prototype.notify = function(o) {
+	notifier.notify( o );
+};
 
 module.exports = Notifier; 
