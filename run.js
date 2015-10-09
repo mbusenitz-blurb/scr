@@ -33,7 +33,7 @@ config.target = config.targetName + ".app/Contents/MacOS/" + config.targetName;
 
 if (config.xcode) {
     config.xcodeProject = config.targetName + '.xcodeproj'
-    config.target = "Debug/" + config.target;
+    //config.target = "Debug/" + config.target;
 }
 
 if (program.test) {
